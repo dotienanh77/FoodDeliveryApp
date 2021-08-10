@@ -331,7 +331,14 @@ const Home = () => {
   const [currentLocation, setCurrentLocation] = React.useState(
     initialCurrentLocation,
   );
-
+  function onSeclectCategory(category) {
+    //filter restaurant
+    let restaurantList = restaurantData.filter(a =>
+      a.categories.includes(category.id),
+    );
+    setRestaurants(restaurantList);
+    setSelectedCategory(category);
+  }
   function renderHeader() {
     return (
       <View style={{flexDirection: 'row', height: 50}}>
@@ -382,13 +389,15 @@ const Home = () => {
           style={{
             padding: SIZES.padding,
             paddingBottom: SIZES.padding * 2,
-            backgroundColor: COLORS.primary,
+            backgroundColor:
+              selectedCategory?.id === item.id ? COLORS.primary : COLORS.white,
             borderRadius: SIZES.radius,
             alignItems: 'center',
             justifyContent: 'center',
             marginRight: SIZES.padding,
             ...styles.shadow,
-          }}>
+          }}
+          onPress={() => onSeclectCategory(item)}>
           <View
             style={{
               width: 50,
@@ -396,7 +405,10 @@ const Home = () => {
               borderRadius: 25,
               alignItems: 'center',
               justifyContent: 'center',
-              backgroundColor: COLORS.white,
+              backgroundColor:
+                selectedCategory?.id === item.id
+                  ? COLORS.white
+                  : COLORS.lightGray,
             }}>
             <Image
               source={item.icon}
@@ -407,7 +419,8 @@ const Home = () => {
           <Text
             style={{
               marginTop: SIZES.padding,
-              color: COLORS.white,
+              color:
+                selectedCategory?.id === item.id ? COLORS.white : COLORS.black,
               ...FONTS.body5,
             }}>
             {item.name}

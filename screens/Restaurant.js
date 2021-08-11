@@ -17,12 +17,52 @@ const Restaurant = ({route, navigation}) => {
   const scrollX = new Animated.Value(0);
   const [restaurant, setRestaurant] = React.useState(null);
   const [currentLocation, setCurrentLocation] = React.useState(null);
-
+  const [orderItems, setOrderItems] = React.useState([]);
   React.useEffect(() => {
     let {item, currentLocation} = route.params;
     setRestaurant(item);
     setCurrentLocation(currentLocation);
   });
+  //
+  function editOrder(action, menuId, price) {
+    let orderList = orderItems.slice(); //lay tat ca phan tu tu mang cu
+    let item = orderList.filter(a => a.menuId === menuId);
+
+    if (action === '+') {
+      if (item.length > 0) {
+        let newQty = item[0].qty + 1;
+        item[0].qty = newQty;
+        item[0].total = item[0].qty * price;
+      } else {
+        const newItem = {
+          menuId: menuId,
+          qty: 1,
+          price: price,
+          total: price,
+        };
+        orderList.push(newItem);
+      }
+      setOrderItems(orderList);
+    } else {
+      if (item.length > 0) {
+        if (item[0]?.qty > 0) {
+          let newQty = item[0].qty - 1;
+          item[0].qty = newQty;
+          item[0].total = newQty * price;
+        }
+      }
+      setOrderItems(orderList);
+    }
+  }
+
+  function getOrderQty(menuId) {
+    let orderItem = orderItems.filter(a => a.menuId === menuId);
+
+    if (orderItem.length > 0) {
+      return orderItem[0].qty;
+    }
+    return 0;
+  }
   function renderHeader() {
     return (
       <View style={{flexDirection: 'row'}}>
@@ -114,7 +154,8 @@ const Restaurant = ({route, navigation}) => {
                     justifyContent: 'center',
                     borderTopLeftRadius: 25,
                     borderBottomLeftRadius: 25,
-                  }}>
+                  }}
+                  onPress={() => editOrder('-', item.menuId, item.price)}>
                   <Text style={{...FONTS.body1}}>-</Text>
                 </TouchableOpacity>
                 <View
@@ -124,7 +165,7 @@ const Restaurant = ({route, navigation}) => {
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}>
-                  <Text style={{...FONTS.h2}}>5</Text>
+                  <Text style={{...FONTS.h2}}>{getOrderQty(item.menuId)}</Text>
                 </View>
                 <TouchableOpacity
                   style={{
@@ -134,7 +175,8 @@ const Restaurant = ({route, navigation}) => {
                     justifyContent: 'center',
                     borderTopRightRadius: 25,
                     borderBottomRightRadius: 25,
-                  }}>
+                  }}
+                  onPress={() => editOrder('+', item.menuId, item.price)}>
                   <Text style={{...FONTS.body1}}>+</Text>
                 </TouchableOpacity>
               </View>

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
@@ -68,7 +69,40 @@ const Restaurant = ({route, navigation}) => {
       </View>
     );
   }
-  return <SafeAreaView style={styles.container}>{renderHeader()}</SafeAreaView>;
+  function renderFoodInfo() {
+    return (
+      <Animated.ScrollView
+        horizontal
+        pagingEnabled
+        scrollEventThrottle={16}
+        snapToAlignment="center"
+        showsHorizontalScrollIndicator={false}
+        // onScroll
+      >
+        {/* Render food image - use map method */}
+        {restaurant?.menu.map((item, index) => (
+          <View style={{alignItems: 'center'}} key={`menu-${index}`}>
+            <View style={{height: SIZES.height * 0.35}}>
+              <Image
+                source={item.photo}
+                resizeMode="cover"
+                style={{
+                  width: SIZES.width,
+                  height: '100%',
+                }}
+              />
+            </View>
+          </View>
+        ))}
+      </Animated.ScrollView>
+    );
+  }
+  return (
+    <SafeAreaView style={styles.container}>
+      {renderHeader()}
+      {renderFoodInfo()}
+    </SafeAreaView>
+  );
 };
 const styles = StyleSheet.create({
   container: {

@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text, View} from 'react-native';
-const OrderDelivery = () => {
+const OrderDelivery = ({route, navigation}) => {
   return (
     <View>
       <Text>OrderDelivery</Text>

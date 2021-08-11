@@ -63,6 +63,12 @@ const Restaurant = ({route, navigation}) => {
     }
     return 0;
   }
+
+  function getBasketItemCount() {
+    let itemCount = orderItems.reduce((a, b) => a + (b.qty || 0), 0);
+    return itemCount;
+  }
+
   function renderHeader() {
     return (
       <View style={{flexDirection: 'row'}}>
@@ -275,7 +281,9 @@ const Restaurant = ({route, navigation}) => {
               borderBottomColor: COLORS.lightGray2,
               borderBottomWidth: 1,
             }}>
-            <Text style={{...FONTS.h3}}>items in Cart</Text>
+            <Text style={{...FONTS.h3}}>
+              {getBasketItemCount()} items in Cart
+            </Text>
             <Text style={{...FONTS.h3}}>$45</Text>
           </View>
           {/* location and card number */}
@@ -342,7 +350,7 @@ const Restaurant = ({route, navigation}) => {
       </View>
     );
   }
-  // main retun
+  // main return
   return (
     <SafeAreaView style={styles.container}>
       {renderHeader()}

@@ -178,6 +178,7 @@ const Restaurant = ({route, navigation}) => {
           alignItems: 'center',
           justifyContent: 'center',
           height: SIZES.padding,
+          paddingBottom: SIZES.padding * 3,
         }}>
         {/* use the map method to render the dots */}
         {restaurant?.menu.map((item, index) => {
@@ -214,8 +215,92 @@ const Restaurant = ({route, navigation}) => {
   }
 
   function renderOrder() {
-    return <View>{renderDots()}</View>;
+    return (
+      <View>
+        {renderDots()}
+        <View
+          style={{
+            backgroundColor: COLORS.white,
+            borderTopLeftRadius: 40,
+            borderTopRightRadius: 40,
+          }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              paddingVertical: SIZES.padding * 2,
+              paddingHorizontal: SIZES.padding * 3,
+              borderBottomColor: COLORS.lightGray2,
+              borderBottomWidth: 1,
+            }}>
+            <Text style={{...FONTS.h3}}>items in Cart</Text>
+            <Text style={{...FONTS.h3}}>$45</Text>
+          </View>
+          {/* location and card number */}
+          <View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                paddingVertical: SIZES.padding * 2,
+                paddingHorizontal: SIZES.padding * 3,
+              }}>
+              <View style={{flexDirection: 'row'}}>
+                <Image
+                  source={icons.pin}
+                  resizeMode="contain"
+                  style={{width: 20, height: 20, tintColor: COLORS.darkgray}}
+                />
+                <Text style={{marginLeft: SIZES.padding, ...FONTS.h4}}>
+                  Location
+                </Text>
+              </View>
+              <View style={{flexDirection: 'row'}}>
+                <Image
+                  source={icons.master_card}
+                  resizeMode="contain"
+                  style={{width: 20, height: 20, tintColor: COLORS.darkgray}}
+                />
+                <Text style={{marginLeft: SIZES.padding, ...FONTS.h4}}>
+                  8888
+                </Text>
+              </View>
+            </View>
+            {/* order button */}
+            <View
+              style={{
+                padding: SIZES.padding * 2,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <TouchableOpacity
+                style={{
+                  width: SIZES.width * 0.9,
+                  padding: SIZES.padding,
+                  backgroundColor: COLORS.primary,
+                  alignItems: 'center',
+                  borderRadius: SIZES.radius,
+                }}>
+                <Text style={{color: COLORS.white, ...FONTS.h2}}>Order</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          {isIphoneX() && (
+            <View
+              style={{
+                position: 'absolute',
+                bottom: -34,
+                left: 0,
+                right: 0,
+                height: 34,
+                backgroundColor: COLORS.white,
+              }}></View>
+          )}
+        </View>
+      </View>
+    );
   }
+  // main retun
   return (
     <SafeAreaView style={styles.container}>
       {renderHeader()}

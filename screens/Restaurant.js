@@ -14,6 +14,7 @@ import {
 import {isIphoneX} from 'react-native-iphone-x-helper';
 import {icons, COLORS, SIZES, FONTS} from '../constants';
 const Restaurant = ({route, navigation}) => {
+  const scrollX = new Animated.Value(0);
   const [restaurant, setRestaurant] = React.useState(null);
   const [currentLocation, setCurrentLocation] = React.useState(null);
 
@@ -69,6 +70,7 @@ const Restaurant = ({route, navigation}) => {
       </View>
     );
   }
+
   function renderFoodInfo() {
     return (
       <Animated.ScrollView
@@ -77,8 +79,11 @@ const Restaurant = ({route, navigation}) => {
         scrollEventThrottle={16}
         snapToAlignment="center"
         showsHorizontalScrollIndicator={false}
-        // onScroll
-      >
+        // onScroll dots event
+        onScroll={Animated.event(
+          [{nativeEvent: {contentOffset: {x: scrollX}}}],
+          {useNativeDriver: false},
+        )}>
         {/* Render food image - use map method */}
         {restaurant?.menu.map((item, index) => (
           <View style={{alignItems: 'center'}} key={`menu-${index}`}>
@@ -163,10 +168,59 @@ const Restaurant = ({route, navigation}) => {
       </Animated.ScrollView>
     );
   }
+
+  function renderDots() {
+    const dotPosition = Animated.divide(scrollX, SIZES.width);
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: SIZES.padding,
+        }}>
+        {/* use the map method to render the dots */}
+        {restaurant?.menu.map((item, index) => {
+          const opacity = dotPosition.interpolate({
+            inputRange: [index - 1, index, index + 1],
+            outputRange: [0.3, 1, 0.3],
+            extrapolate: 'clamp',
+          });
+          const dotSize = dotPosition.interpolate({
+            inputRange: [index - 1, index, index + 1],
+            outputRange: [SIZES.base * 0.8, 10, SIZES.base * 0.8],
+            extrapolate: 'clamp',
+          });
+          const dotColor = dotPosition.interpolate({
+            inputRange: [index - 1, index, index + 1],
+            outputRange: [COLORS.darkgray, COLORS.primary, COLORS.darkgray],
+            extrapolate: 'clamp',
+          });
+          return (
+            <Animated.View
+              key={`dot-${index}`}
+              opacity={opacity}
+              style={{
+                borderRadius: SIZES.radius,
+                marginHorizontal: 6,
+                width: dotSize,
+                height: dotSize,
+                backgroundColor: dotColor,
+              }}></Animated.View>
+          );
+        })}
+      </View>
+    );
+  }
+
+  function renderOrder() {
+    return <View>{renderDots()}</View>;
+  }
   return (
     <SafeAreaView style={styles.container}>
       {renderHeader()}
       {renderFoodInfo()}
+      {renderOrder()}
     </SafeAreaView>
   );
 };

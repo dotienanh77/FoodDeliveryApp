@@ -69,6 +69,11 @@ const Restaurant = ({route, navigation}) => {
     return itemCount;
   }
 
+  function sumOrder() {
+    let total = orderItems.reduce((a, b) => a + (b.total || 0), 0);
+    return total.toFixed(2);
+  }
+
   function renderHeader() {
     return (
       <View style={{flexDirection: 'row'}}>
@@ -284,7 +289,7 @@ const Restaurant = ({route, navigation}) => {
             <Text style={{...FONTS.h3}}>
               {getBasketItemCount()} items in Cart
             </Text>
-            <Text style={{...FONTS.h3}}>$45</Text>
+            <Text style={{...FONTS.h3}}>${sumOrder()}</Text>
           </View>
           {/* location and card number */}
           <View>

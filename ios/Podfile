@@ -4,6 +4,12 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 platform :ios, '10.0'
 
 target 'FoodDeliveryApp' do
+  # React Native Maps dependencies
+  rn_maps_path = '../node_modules/react-native-maps'
+  pod 'react-native-google-maps', :path => rn_maps_path
+  pod 'GoogleMaps'
+  pod 'Google-Maps-iOS-Utils'
+  
   config = use_native_modules!
 
   use_react_native!(
@@ -11,6 +17,8 @@ target 'FoodDeliveryApp' do
     # to enable hermes on iOS, change `false` to `true` and then install pods
     :hermes_enabled => false
   )
+
+  pod 'react-native-maps', :path => '../node_modules/react-native-maps'
 
   target 'FoodDeliveryAppTests' do
     inherit! :complete

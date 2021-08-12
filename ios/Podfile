@@ -18,7 +18,6 @@ target 'FoodDeliveryApp' do
     :hermes_enabled => false
   )
 
-  pod 'react-native-maps', :path => '../node_modules/react-native-maps'
 
   target 'FoodDeliveryAppTests' do
     inherit! :complete

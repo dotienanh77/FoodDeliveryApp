@@ -49,7 +49,26 @@ const OrderDelivery = ({route, navigation}) => {
 
     return (Math.atan2(dy, dx) * 180) / Math.PI;
   }
-
+  function zoomIn() {
+    let newRegion = {
+      latitude: region.latitude,
+      longtitude: region.longitude,
+      latitudeDelta: region.latitudeDelta / 2,
+      longitudeDelta: region.longitudeDelta / 2,
+    };
+    setRegion(newRegion);
+    mapView.current.animateToRegion(newRegion, 200);
+  }
+  function zoomOut() {
+    let newRegion = {
+      latitude: region.latitude,
+      longtitude: region.longitude,
+      latitudeDelta: region.latitudeDelta * 2,
+      longitudeDelta: region.longitudeDelta * 2,
+    };
+    setRegion(newRegion);
+    mapView.current.animateToRegion(newRegion, 200);
+  }
   function renderMap() {
     const destinationMarker = () => (
       <Marker coordinate={toLocation}>
@@ -257,11 +276,52 @@ const OrderDelivery = ({route, navigation}) => {
       </View>
     );
   }
+  function renderButtons() {
+    return (
+      <View
+        style={{
+          position: 'absolute',
+          bottom: SIZES.height * 0.35,
+          right: SIZES.padding * 2,
+          width: 60,
+          height: 130,
+          justifyContent: 'space-between',
+        }}>
+        {/* Zoom in */}
+        <TouchableOpacity
+          style={{
+            width: 60,
+            height: 60,
+            borderRadius: 30,
+            backgroundColor: COLORS.white,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+          onPress={() => zoomIn()}>
+          <Text style={{...FONTS.body1}}>+</Text>
+        </TouchableOpacity>
+        {/* Zoom out */}
+        <TouchableOpacity
+          style={{
+            width: 60,
+            height: 60,
+            borderRadius: 30,
+            backgroundColor: COLORS.white,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+          onPress={() => zoomOut()}>
+          <Text style={{...FONTS.body1}}>-</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
   return (
     <View style={{flex: 1}}>
       {renderMap()}
       {renderDextinationHeader()}
       {renderDeliveryInfo()}
+      {renderButtons()}
     </View>
   );
 };
